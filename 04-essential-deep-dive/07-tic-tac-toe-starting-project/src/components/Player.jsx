@@ -26,13 +26,13 @@ export function Player({ initialName, symbol, isActive }) {
     }
 
     return (
-        <li className={isActive ? 'active' : ''}>
+        <div className={isActive ? 'active' : undefined}>
             <span className="player">
                 {playerField}
                 <span className="player-symbol">{symbol}</span>
             </span>
             <button onClick={handleEditClick}>{isEditing ? 'Save' : 'Edit'}</button>
-        </li>
+        </div>
     );
 }
 4
