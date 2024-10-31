@@ -1,6 +1,7 @@
 import { Player } from './components/Player.jsx'
 import { GameBoard } from './components/GameBoard.jsx';
 import { useState } from 'react';
+import { Log } from './components/Log.jsx';
 
 function App() {
 
@@ -8,12 +9,33 @@ function App() {
     const player2_symbol = 'O';
 
     const [activePlayer, setActivePlayer] = useState(player1_symbol);
+    const [gameTurns, setGameTurns] = useState([]);
 
     let player1_active = activePlayer === player1_symbol;
     let player2_active = activePlayer === player2_symbol;
 
-    function handleSelectSquare() {
+    function handleSelectSquare(rowIndex, colIndex) {
+        console.log("handleSelectSquare:rowIndex = " + rowIndex + ", colIndex = " + colIndex);
         setActivePlayer((currentActivePlayer) => currentActivePlayer === player1_symbol ? player2_symbol : player1_symbol);
+        setGameTurns(prevTurns => {
+            console.log("prevTurns = " + prevTurns);
+            const lastTurn = prevTurns.length > 0 ? prevTurns[0].player : player1_symbol;
+            console.log("last turn = '" + lastTurn + "'");
+            let currentPlayer = getCurrentPlayer(lastTurn);
+            console.log("currentPlayer = '" + currentPlayer + "'");
+            const currentTurn = { square: { row: rowIndex, col: colIndex }, player: currentPlayer };
+            console.log("currentTurn = " + currentTurn.square.row + ", " + currentTurn.square.col + ", '" + currentTurn.player + "'");
+            const updatedTurns = [currentTurn, ...prevTurns];
+            return updatedTurns;
+        });
+
+        function getCurrentPlayer(lastTurn) {
+            let currentPlayer = player1_symbol;
+            if (lastTurn === player1_symbol) {
+                currentPlayer = player2_symbol;
+            }
+            return currentPlayer;
+        }
     }
 
     return (
@@ -27,8 +49,9 @@ function App() {
                         <Player initialName="Player 2" symbol={player2_symbol} isActive={player2_active} />
                     </li>
                 </ol>
-                <GameBoard onSelectSquare={handleSelectSquare} activePlayerSymbol={activePlayer} />
+                <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns} />
             </div>
+            <Log />
         </main>
     );
 }
