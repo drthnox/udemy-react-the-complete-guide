@@ -8,25 +8,20 @@ const player2_symbol = 'O';
 
 
 function getCurrentPlayer(gameTurns) {
-    const lastTurn = gameTurns.length > 0 ? gameTurns[0].player : player1_symbol;
-    let currentPlayer = player1_symbol;
-    if (lastTurn === player1_symbol) {
+    let currentPlayer = player1_symbol
+    if (gameTurns.length > 0 && gameTurns[0].player == player1_symbol) {
         currentPlayer = player2_symbol;
     }
     return currentPlayer;
 }
 
 function App() {
-
-    const [activePlayer, setActivePlayer] = useState(player1_symbol);
     const [gameTurns, setGameTurns] = useState([]);
-
+    const activePlayer = getCurrentPlayer(gameTurns);
     let player1_active = activePlayer === player1_symbol;
     let player2_active = activePlayer === player2_symbol;
 
     function handleSelectSquare(rowIndex, colIndex) {
-        console.log("handleSelectSquare:rowIndex = " + rowIndex + ", colIndex = " + colIndex);
-        setActivePlayer((currentActivePlayer) => currentActivePlayer === player1_symbol ? player2_symbol : player1_symbol);
         setGameTurns(prevTurns => {
             let currentPlayer = getCurrentPlayer(prevTurns);
             const currentTurn = { square: { row: rowIndex, col: colIndex }, player: currentPlayer };
