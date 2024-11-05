@@ -24,6 +24,19 @@ function getCurrentPlayer(gameTurns) {
     return currentPlayer;
 }
 
+function deriveWinner(gameBoard, players) {
+    let winner = null;
+    for (const combination of WINNING_COMBINATIONS) {
+        const firstSquare = gameBoard[combination[0].row][combination[0].col];
+        const secondSquare = gameBoard[combination[1].row][combination[1].col];
+        const thirdSquare = gameBoard[combination[2].row][combination[2].col];
+        if (firstSquare && secondSquare && thirdSquare && firstSquare === secondSquare && secondSquare === thirdSquare) {
+            winner = players[firstSquare];
+        }
+    }
+    return winner;
+}
+
 function App() {
     const [players, setPlayers] = useState({ X: 'Player 1', O: 'Player 2' });
     const [gameTurns, setGameTurns] = useState([]);
@@ -40,20 +53,14 @@ function App() {
     let player1_active = activePlayer === 'X';
     let player2_active = activePlayer === 'O';
     let winner = null;
-    let hasDraw = false;
     if (gameTurns.length > 2) {
-        for (const combination of WINNING_COMBINATIONS) {
-            const firstSquare = gameBoard[combination[0].row][combination[0].col];
-            const secondSquare = gameBoard[combination[1].row][combination[1].col];
-            const thirdSquare = gameBoard[combination[2].row][combination[2].col];
-            if (firstSquare && secondSquare && thirdSquare && firstSquare === secondSquare && secondSquare === thirdSquare) {
-                winner = players[firstSquare];
-            }
-        }
-        // draw if winner is null and 9 turns have elapsed
-        if (!winner && gameTurns.length === 9) {
-            hasDraw = true;
-        }
+        winner = deriveWinner(gameBoard, players);
+    }
+
+    // draw if winner is null and 9 turns have elapsed
+    let hasDraw = false;
+    if (!winner && gameTurns.length === 9) {
+        hasDraw = true;
     }
 
     function handleSelectRematch() {
