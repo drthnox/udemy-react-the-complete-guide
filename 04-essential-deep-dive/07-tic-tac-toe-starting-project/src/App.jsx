@@ -37,12 +37,15 @@ function App() {
 
     let player1_active = activePlayer === player1_symbol;
     let player2_active = activePlayer === player2_symbol;
-
+    let winner = null;
     if (gameTurns.length > 2) {
         for (const combination of WINNING_COMBINATIONS) {
-            const firstSquare = combination[0];
-            const secondSquare = combination[1];
-            const thirdSquare = combination[2];
+            const firstSquare = gameBoard[combination[0].row][combination[0].col];
+            const secondSquare = gameBoard[combination[1].row][combination[1].col];
+            const thirdSquare = gameBoard[combination[2].row][combination[2].col];
+            if (firstSquare && secondSquare && thirdSquare && firstSquare === secondSquare && secondSquare === thirdSquare) {
+                winner = firstSquare;
+            }
         }
     }
     function handleSelectSquare(rowIndex, colIndex) {
@@ -66,6 +69,7 @@ function App() {
                 </ol>
                 <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
             </div>
+            {winner ? <h1 id="winner">Winner: {winner}</h1> : null}
             <Log turns={gameTurns} />
         </main>
     );
