@@ -3,10 +3,20 @@ import { GameBoard } from './components/GameBoard.jsx';
 import { useState } from 'react';
 import { Log } from './components/Log.jsx';
 
-function App() {
+const player1_symbol = 'X';
+const player2_symbol = 'O';
 
-    const player1_symbol = 'X';
-    const player2_symbol = 'O';
+
+function getCurrentPlayer(gameTurns) {
+    const lastTurn = gameTurns.length > 0 ? gameTurns[0].player : player1_symbol;
+    let currentPlayer = player1_symbol;
+    if (lastTurn === player1_symbol) {
+        currentPlayer = player2_symbol;
+    }
+    return currentPlayer;
+}
+
+function App() {
 
     const [activePlayer, setActivePlayer] = useState(player1_symbol);
     const [gameTurns, setGameTurns] = useState([]);
@@ -22,15 +32,6 @@ function App() {
             const currentTurn = { square: { row: rowIndex, col: colIndex }, player: currentPlayer };
             return [currentTurn, ...prevTurns];
         });
-
-        function getCurrentPlayer(prevTurns) {
-            const lastTurn = prevTurns.length > 0 ? prevTurns[0].player : player1_symbol;
-            let currentPlayer = player1_symbol;
-            if (lastTurn === player1_symbol) {
-                currentPlayer = player2_symbol;
-            }
-            return currentPlayer;
-        }
     }
 
     return (
