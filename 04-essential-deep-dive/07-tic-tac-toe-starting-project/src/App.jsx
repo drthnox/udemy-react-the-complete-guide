@@ -25,6 +25,7 @@ function getCurrentPlayer(gameTurns) {
 }
 
 function App() {
+    const [players, setPlayers] = useState({ X: 'Player 1', O: 'Player 2' });
     const [gameTurns, setGameTurns] = useState([]);
     const activePlayer = getCurrentPlayer(gameTurns);
 
@@ -36,8 +37,8 @@ function App() {
         gameBoard[row][col] = player;
     }
 
-    let player1_active = activePlayer === player1_symbol;
-    let player2_active = activePlayer === player2_symbol;
+    let player1_active = activePlayer === 'X';
+    let player2_active = activePlayer === 'O';
     let winner = null;
     let hasDraw = false;
     if (gameTurns.length > 2) {
@@ -46,7 +47,7 @@ function App() {
             const secondSquare = gameBoard[combination[1].row][combination[1].col];
             const thirdSquare = gameBoard[combination[2].row][combination[2].col];
             if (firstSquare && secondSquare && thirdSquare && firstSquare === secondSquare && secondSquare === thirdSquare) {
-                winner = firstSquare;
+                winner = players[firstSquare];
             }
         }
         // draw if winner is null and 9 turns have elapsed
@@ -67,15 +68,26 @@ function App() {
         });
     }
 
+    function handlePlayerNameChange(symbol, newPlayerName) {
+        setPlayers(
+            prevPlayers => {
+                return {
+                    ...prevPlayers,
+                    [symbol]: newPlayerName
+                };
+            }
+        );
+    }
+
     return (
         <main>
             <div id="game-container">
                 <ol id="players" className="highlight-player">
                     <li className={player1_active ? 'active' : ''}>
-                        <Player initialName="Player 1" symbol={player1_symbol} isActive={player1_active} />
+                        <Player initialName="Player 1" isActive={player1_active} onPlayerNameChange={handlePlayerNameChange} />
                     </li>
                     <li className={player2_active ? 'active' : ''}>
-                        <Player initialName="Player 2" symbol={player2_symbol} isActive={player2_active} />
+                        <Player initialName="Player 2" isActive={player2_active} onPlayerNameChange={handlePlayerNameChange} />
                     </li>
                 </ol>
                 <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />

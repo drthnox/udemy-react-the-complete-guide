@@ -1,11 +1,11 @@
 import { Player } from './Player.jsx';
 
-export function Players({ player1, player2, player1_symbol, player2_symbol, activePlayer }) {
+export function Players({ player1, player2, activePlayer }) {
 
     console.log('Players:activePlayer = ' + activePlayer);
 
-    let player1_active = activePlayer === player1_symbol;
-    let player2_active = activePlayer === player2_symbol;
+    let player1_active = activePlayer === 'X';
+    let player2_active = activePlayer === 'O';
     console.log('Players:player1_active = ' + player1_active);
     console.log('Players:player2_active = ' + player2_active);
 
