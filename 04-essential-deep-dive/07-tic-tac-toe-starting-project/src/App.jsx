@@ -18,18 +18,13 @@ function App() {
         console.log("handleSelectSquare:rowIndex = " + rowIndex + ", colIndex = " + colIndex);
         setActivePlayer((currentActivePlayer) => currentActivePlayer === player1_symbol ? player2_symbol : player1_symbol);
         setGameTurns(prevTurns => {
-            console.log("prevTurns = " + prevTurns);
-            const lastTurn = prevTurns.length > 0 ? prevTurns[0].player : player1_symbol;
-            console.log("last turn = '" + lastTurn + "'");
-            let currentPlayer = getCurrentPlayer(lastTurn);
-            console.log("currentPlayer = '" + currentPlayer + "'");
+            let currentPlayer = getCurrentPlayer(prevTurns);
             const currentTurn = { square: { row: rowIndex, col: colIndex }, player: currentPlayer };
-            console.log("currentTurn = " + currentTurn.square.row + ", " + currentTurn.square.col + ", '" + currentTurn.player + "'");
-            const updatedTurns = [currentTurn, ...prevTurns];
-            return updatedTurns;
+            return [currentTurn, ...prevTurns];
         });
 
-        function getCurrentPlayer(lastTurn) {
+        function getCurrentPlayer(prevTurns) {
+            const lastTurn = prevTurns.length > 0 ? prevTurns[0].player : player1_symbol;
             let currentPlayer = player1_symbol;
             if (lastTurn === player1_symbol) {
                 currentPlayer = player2_symbol;
