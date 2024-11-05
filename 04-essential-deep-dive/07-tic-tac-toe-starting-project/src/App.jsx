@@ -39,6 +39,7 @@ function App() {
     let player1_active = activePlayer === player1_symbol;
     let player2_active = activePlayer === player2_symbol;
     let winner = null;
+    let hasDraw = false;
     if (gameTurns.length > 2) {
         for (const combination of WINNING_COMBINATIONS) {
             const firstSquare = gameBoard[combination[0].row][combination[0].col];
@@ -47,6 +48,10 @@ function App() {
             if (firstSquare && secondSquare && thirdSquare && firstSquare === secondSquare && secondSquare === thirdSquare) {
                 winner = firstSquare;
             }
+        }
+        // draw if winner is null and 9 turns have elapsed
+        if (!winner && gameTurns.length === 9) {
+            hasDraw = true;
         }
     }
     function handleSelectSquare(rowIndex, colIndex) {
@@ -70,7 +75,7 @@ function App() {
                 </ol>
                 <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
             </div>
-            {winner && <GameOver winner={winner} />}
+            {(winner || hasDraw) && <GameOver winner={winner} />}
             <Log turns={gameTurns} />
         </main>
     );
