@@ -22,11 +22,14 @@ function App() {
         });
     }
 
+    const isValidInput = userInput.duration > 0 && userInput.initialInvestment > 0 && userInput.annualInvestment > 0 && userInput.expectedReturn > 0;
+
     return (
         <>
             <Header />
             <UserInput onInputChange={handleUserInputChange} userInput={userInput} />
-            <Results userInput={userInput} />
+            {!isValidInput && (<p>Please enter valid values</p>)}
+            {isValidInput && <Results userInput={userInput} />}
         </>
     );
 }
